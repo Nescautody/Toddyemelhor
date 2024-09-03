@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pac-Man Simples</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+        canvas {
+            display: block;
+            margin: auto;
+            background-color: #222;
+        }
+        .controls {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 400px;
+            margin: 10px;
+        }
+        .button {
+            background-color: #444;
+            border: 1px solid #888;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            user-select: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
+    <div class="controls">
+        <div class="button" id="left">&#9664;</div>
+        <div class="button" id="up">&#9650;</div>
+        <div class="button" id="down">&#9660;</div>
+        <div class="button" id="right">&#9654;</div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const pacSize = 30;
+        let pacX = canvas.width / 2;
+        let pacY = canvas.height / 2;
+        let pacSpeed = 5;
+
+        function drawPacman() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.arc(pacX, pacY, pacSize, 0.2 * Math.PI, 1.8 * Math.PI);
+            ctx.lineTo(pacX, pacY);
+            ctx.fillStyle = 'yellow';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function updatePosition() {
+            pacX = Math.max(pacSize, Math.min(canvas.width - pacSize, pacX));
+            pacY = Math.max(pacSize, Math.min(canvas.height - pacSize, pacY));
+        }
+
+        function movePacman(direction) {
+            if (direction === 'left') pacX -= pacSpeed;
+            if (direction === 'right') pacX += pacSpeed;
+            if (direction === 'up') pacY -= pacSpeed;
+            if (direction === 'down') pacY += pacSpeed;
+            updatePosition();
+            drawPacman();
+        }
+
+        document.getElementById('left').addEventListener('touchstart', () => movePacman('left'));
+        document.getElementById('right').addEventListener('touchstart', () => movePacman('right'));
+        document.getElementById('up').addEventListener('touchstart', () => movePacman('up'));
+        document.getElementById('down').addEventListener('touchstart', () => movePacman('down'));
+
+        drawPacman();
+    </script>
+</body>
+</html>
